@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var config = require('./config')
 
 var app = express();
 
@@ -12,6 +13,10 @@ app.use(function(req,res,next){
 	next();
 })
 
+config.entryPoints.forEach(function(entryPoint){
+    var cur = require('app/'+ entryPoint + '/parser');
+    app.use('/api/'+ cur.node, require('app/'+ entryPoint + '/router'));
+})
 app.use('/api/north_charleston', require('app/n-charleston/router'));
 //later auction lists here
 

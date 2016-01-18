@@ -36,7 +36,7 @@ var url = "http://www.charlestoncounty.org/foreclosure/runninglist.html";
 /**
  * pulls table out of loaded data
  */
-function parse(){
+function parse(callback){
   request(url, function(err, res, html){
       if(err) return console.error(err);
       var $ = cheerio.load(html); 
@@ -65,15 +65,9 @@ function parse(){
          }
          result[dateKey].push(obj);
       })
-      //overrite the node in firebase
-      ref.set(result, function(error){
-          if(error) console.log("error occurred overriting node: ", node);
-          else console.log("successfully set data node: ", node);
-      });
+      callback(result);
    });
 }
-
-//function to insert into firebase
 
 exports.parse = parse;
 exports.node = node;
