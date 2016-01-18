@@ -1,66 +1,34 @@
-var request = require('request');
-var cheerio = require('cheerio');
-/**
- * Model scrapes all the shiz off the site and outputs nice JSON
- * 
- * JSON Object Schema
- * [
-    {
-        date: 'date',
-        auctions : 
-        [
-            {
-                plantiff: 'String',
-                defendent: 'String',
-                address: 'String',
-                attorney:{
-                    name: 'String',
-                    number: 'String'
-                },
-                location: 'String',
-                judgement: 'String'
-            }    
-        ]
-    }
-   ]   
- */
+var ref = require('../config').firebaseRef;
+var lastCronJob = require('../config').lastCronJob;
+var node = require('parser').node;
 
-var url = "http://www.charlestoncounty.org/foreclosure/runninglist.html";
+//set root ref to be north_charleston node
+ref = ref.child(node);
 
 /**
- * pulls table out of loaded data
- */
-function fetchTable(callback){
-  request(url, function(err, res, html){
-      if(err) return console.error(err);
-      var $ = cheerio.load(html); 
-      var result = {};
-      //grab all rows - minus header row
-      var data = $('table tr').not(':first-child');
-      
-      //loop through rows
-      $(data).each(function(i, elem){
-         //result does not contain date key
-         var dateKey = $('td:first-child > p:first-child', elem).text();
-         
-         var cells = $(elem).children();
-             var obj = {};
-             obj.plantiff = $('p:first-child', cells[1]).text().replace(/\r\n/g,'');
-             obj.defendant = $('p:first-child', cells[2]).text().replace(/\r\n/g,'');
-             obj.address = $('p', cells[3]).children().eq(1).text().replace(/\r\n/g,'');
-             obj.judgement = $('p:first-child', cells[4]).text();
-             obj.attorney = {
-                 name: $('p:first-child', cells[6]).text().replace(/\r\n/g,''),
-                 phone: $('p', cells[6]).last().children().text()
-             }
-             obj.city = $('p:first-child', cells[7]).text().replace(/\r\n/g,'');
-         if(!( dateKey in result )) {
-             result[dateKey] = [];
-         }
-         result[dateKey].push(obj);
-      })
-      callback(result);
-   });
+ * compare date of last cron job run, if different, query firebase and set date
+ * if not different day, than just use cached object and dont hit firebase 
+ * */
+var data = {};
+
+var model = {};
+
+model.getRoot = function(callback){
+    ref.on('value', function(snapshot){
+        callback(snapshot.val());
+    });
 }
 
-exports.fetchTable = fetchTable;
+model.getDate = function(dateString, callback){
+    ref.child(dateString).on('value', function(snapshot){
+        callback(snapshot.val());
+    })
+}
+
+model.getAuction = function(dateString, index, callback){
+    ref.child(dateString).child(index).on('value', function(snapshot){
+        callback(snapshot.val());
+    })
+}
+
+module.exports = model;
