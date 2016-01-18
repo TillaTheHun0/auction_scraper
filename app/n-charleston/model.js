@@ -1,6 +1,6 @@
 var ref = require('../config').firebaseRef;
 var lastCronJob = require('../config').lastCronJob;
-var node = require('parser').node;
+var node = require('./parser').node;
 
 //set root ref to be north_charleston node
 ref = ref.child(node);

@@ -12,7 +12,7 @@ app.use(function(req,res,next){
 	next();
 })
 
-app.use('/api', require('app/n-charleston/router'));
+app.use('/api/north_charleston', require('app/n-charleston/router'));
 //later auction lists here
 
 //error handler
