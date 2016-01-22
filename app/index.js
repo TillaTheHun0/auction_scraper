@@ -20,6 +20,6 @@ config.entryPoints.forEach(function(entryPoint){
 //later auction lists here
 
 //error handler
-app.use('api/', require("app/errors/notFound"));
+app.use(require("app/errors/notFound"));
 
 module.exports = app;
