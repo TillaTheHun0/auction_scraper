@@ -17,10 +17,9 @@ config.entryPoints.forEach(function(entryPoint){
     var cur = require('app/'+ entryPoint + '/parser');
     app.use('/api/'+ cur.node, require('app/'+ entryPoint + '/router'));
 })
-app.use('/api/north_charleston', require('app/n-charleston/router'));
 //later auction lists here
 
 //error handler
-app.use(require("app/errors/notFound"));
+app.use('api/', require("app/errors/notFound"));
 
 module.exports = app;
