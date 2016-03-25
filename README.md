@@ -21,9 +21,9 @@ A Restful service that serves up county property foreclosure auction data as jso
 Currently only a single endpoint that returns json for auctions listed on the North Charleston auctions page.
 ##Future Additions:
 * ~~Store JSON in Firebase instead of calculating everytime~~ (Done!)
-  * add endpoints to fetch from these smaller nodes 
+  * ~~add endpoints to fetch from these smaller nodes 
 * More endpoints for more counties (feel free to add your own)
-* Dynamic Express endpoints
+* ~~Dynamic Express endpoints (Sort of?)
 
 #How to add your own/ contribute
 This is an Express app and is structured in a way that encourages creating Express "Mini-Apps".
