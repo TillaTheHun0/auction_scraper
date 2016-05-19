@@ -38,7 +38,7 @@ If you'd like to add a set of endpoints, I would recommend following these steps
 
 #Tips
 To make require paths 'neater' and not so '../../..', I created a symbolic link in my node_modules folder that points to your 'app' 
-directory. The app will not work if you do not create this symbolic link.
+directory. **The app will not work if you do not create this symbolic link.**
 * Navigate into node_modules
 * ``` ln -nsf ../app ```
 
